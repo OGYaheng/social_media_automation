@@ -5,7 +5,6 @@ import time
 import logging
 from datetime import datetime
 
-# 設置日誌紀錄
 logging.basicConfig(filename="social_media_automation.log", level=logging.INFO)
 
 # Twitter API 認證
@@ -28,7 +27,6 @@ twitter_api = tweepy.API(auth)
 # 設置 Facebook API 客戶端
 facebook_api = facebook.GraphAPI(access_token=facebook_access_token)
 
-# 發送 Twitter 訊息
 def post_twitter(message):
     try:
         twitter_api.update_status(message)
@@ -36,7 +34,6 @@ def post_twitter(message):
     except Exception as e:
         logging.error(f"{datetime.now()} - Twitter 發送失敗: {str(e)}")
 
-# 發送 Facebook 訊息
 def post_facebook(message):
     try:
         facebook_api.put_object(parent_object=facebook_page_id, connection_name='feed', message=message)
@@ -46,11 +43,9 @@ def post_facebook(message):
 
 # 定時發文
 def schedule_posts():
-    # 每天 9 AM 發送 Twitter 和 Facebook 帖子
     schedule.every().day.at("09:00").do(post_twitter, message="Good morning from Twitter!")
     schedule.every().day.at("09:00").do(post_facebook, message="Good morning from Facebook!")
 
-    # 每週一發送 Twitter 和 Facebook 帖子
     schedule.every().monday.at("10:00").do(post_twitter, message="Weekly update from Twitter!")
     schedule.every().monday.at("10:00").do(post_facebook, message="Weekly update from Facebook!")
 
@@ -58,7 +53,7 @@ def schedule_posts():
 def run_scheduler():
     while True:
         schedule.run_pending()
-        time.sleep(60)  # 每分鐘檢查一次
+        time.sleep(60) 
 
 if __name__ == "__main__":
     schedule_posts()
